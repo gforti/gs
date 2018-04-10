@@ -35,5 +35,16 @@ module.exports = [
     time: 60,
     lock: true
 }
+,
+{
+    question: "Recite memory qoute 2",
+    choices: [
+        'correct',
+        'incorrect'
+    ],
+    answer: 'correct',
+    time: 30,
+    lock: true
+}
 ];
 

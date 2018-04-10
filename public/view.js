@@ -20,10 +20,9 @@ let questionReady = false
 let soundFXOn = true
 
 let s_correct = new Audio(`fx/correct.mp3`)
-let s_wrong = new Audio(`fx/wrong2.mp3`)
+let s_wrong = new Audio(`fx/wrong.mp3`)
 let s_lock = new Audio(`fx/lock.wav`)
-let s_select = new Audio(`fx/select.mp3`)
-let s_buzz = new Audio(`fx/buzz4.wav`)
+let s_buzz = new Audio(`fx/buzz.wav`)
 
 let s_10sec = new Audio(`timer/10sec.mp3`)
 let s_30sec = new Audio(`timer/30sec.mp3`)
@@ -134,11 +133,6 @@ function highlightChoice(choice) {
             input.classList.add('highlight')
         }
     })
-     /*if(soundFXOn){
-        s_select.pause()
-        s_select.currentTime = 0
-        s_select.play()
-     }*/
 }
 
 socket.on('answerlock', (answerChosen) => {
@@ -370,7 +364,7 @@ introTrack.addEventListener('ended',()=>{
     socket.emit('introTrackEnded')
 })
 let tracks = [];
-for (let i = 4; i <= 5; i++)
+for (let i = 2; i <= 4; i++)
 tracks.push(new Audio(`tracks/track${i}.mp3`))
 
 tracks.sort(function() {return 0.5 - Math.random()})

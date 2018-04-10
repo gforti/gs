@@ -113,7 +113,8 @@ io.on('connection', (socket) => {
     clearBuzzers()
     data.currentQuestion = (data.currentQuestion + 1) % data.totalQuestions
     Object.assign(data, questions[data.currentQuestion])
-    data.choices = shuffle(data.choices)
+    if (data.choices.length > 2)
+        data.choices = shuffle(data.choices)
     io.sockets.emit('question', Object.assign({}, getData()))
   })
 
