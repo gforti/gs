@@ -25,7 +25,6 @@ let data = {
   pauseMusic: true,
   pauseSoundFX: false,
   pauseIntroMusic: true,
-  allowSelection: false,
   questionReady: false
 }
 
@@ -163,11 +162,6 @@ io.on('connection', (socket) => {
 
   socket.on('volMusic', (vol) => {
     io.sockets.emit('musicVolume', vol)
-  })
-
-  socket.on('allowSelection', (canSelect) => {
-      data.allowSelection = canSelect
-    io.sockets.emit('selectionToggle', Object.assign({}, getData()))
   })
 
   socket.on('resetHostPause', () => {

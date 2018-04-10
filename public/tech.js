@@ -11,15 +11,12 @@ const soundFX = document.querySelector('.js-fx')
 const introMusic = document.querySelector('.js-intro-music')
 const currentQuestionNumber = document.querySelector('.js-total-questions span')
 
-const answers = document.querySelector('.js-answers')
-const choices = document.querySelector('.js-choices')
-const lock = document.querySelector('.js-lock')
-const viewquestion = document.querySelector('.view-question')
+
 const musicVol = document.querySelector('input[name="musicVol"]')
 const currQuestion = document.querySelector('input[name="curQ"]')
 
 
-lock.addEventListener('click', lockChoice)
+
 musicVol.addEventListener('change', updateMusicVol)
 currQuestion.addEventListener('change', updateCurrQuestion)
 
@@ -27,7 +24,7 @@ let pauseTime = false
 let pauseMusic = true
 let pauseSoundFX = false
 let pauseIntroMusic = true
-let allowSelection = false
+
 
 
 socket.on('connected', (data) => {
@@ -35,8 +32,6 @@ socket.on('connected', (data) => {
   pauseMusic = data.pauseMusic
   pauseSoundFX = data.pauseSoundFX
   pauseIntroMusic = data.pauseIntroMusic
-  allowSelection = data.allowSelection
-
 
   if (data.questionReady ) {
        displayChoices(data)
@@ -121,7 +116,7 @@ function updateMusicVol() {
 }
 
 function updateCurrQuestion() {
-    console.log(currQuestion.validity.valid)
+
     if (currQuestion.validity.valid) {
         socket.emit('updateCurrentQuestion', currQuestion.value-2)
     }
@@ -139,8 +134,7 @@ function toogleSelection() {
 }
 
 function showQuestion() {
-    logo.disabled = true
-    // question.disabled = true
+
     resetPause()
     socket.emit('showQuestion')
     socket.emit('questionClose')
@@ -172,53 +166,16 @@ socket.on('question', (data) => {
 
  function displayChoices(data) {
 
-    choices.innerHTML = ''
-    viewquestion.innerHTML = ''
-    if ( data.choices && data.choices.length ) {
-        lock.disabled = false
-        viewquestion.innerHTML = data.question
-        let html = '<ul class="view-answers host">';
-        currentQuestionNumber.innerHTML = ~~data.currentQuestion+1
-        currQuestion.value = ~~data.currentQuestion+1
-        data.choices.forEach( (answer, i) => {
-            html += `<li>
-                    <input  type="radio"
-                            name="answer"
-                            value="${answer}"
-                            id="${answer}"
-                    > <label for="${answer}" class="label">
-                    ${answer}
-                </label></li>`
-         })
-         html += `</ul> <p> <big>Answer: ${data.answer}</big></p>`
-         choices.innerHTML = html
-
-    }
-}
-
-function lockChoice(){
-    let answer = document.querySelector('input[name="answer"]:checked')
-
-    if (answer) {
-        answer = answer.value
-        disableChoice()
-        socket.emit('lock', answer)
-    }
+    currentQuestionNumber.innerHTML = ~~data.currentQuestion+1
+    currQuestion.value = ~~data.currentQuestion+1
 
 }
 
 function disableChoice() {
-    lock.disabled = true
-    document.querySelectorAll('input[name="answer"]').forEach( (input) =>{
-        input.disabled = true
-    })
+    logo.disabled = true
 }
 
 function enableChoice() {
-    lock.disabled = false
     logo.disabled = false
-    // question.disabled = false
-    document.querySelectorAll('input[name="answer"]').forEach( (input) =>{
-        input.disabled = false
-    })
+
 }

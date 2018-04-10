@@ -23,13 +23,6 @@ block content
             =` / ${totalQuestions}`
         input(name="curQ" type="number" value=`${~~currentQuestion < 0 ? 0 : currentQuestion}` min="1" max=totalQuestions required='required')
 
-      div.js-question.view-question Question
-      div.js-answers                      
-        div.js-choices.host-choices
-        p
-          button.js-lock.host-lock Lock In
-
-
     datalist(id="tickmarks")
         - for (var x = 0; x <= 50; x=x+5)
             option(value=x)

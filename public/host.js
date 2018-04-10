@@ -20,8 +20,6 @@ reveal.addEventListener('click', revealAnswer)
 
 let pauseTime = false
 
-
-
 socket.on('connected', (data) => {
   pauseTime = data.pauseTime
 
