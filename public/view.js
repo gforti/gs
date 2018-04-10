@@ -364,7 +364,7 @@ introTrack.addEventListener('ended',()=>{
     socket.emit('introTrackEnded')
 })
 let tracks = [];
-for (let i = 2; i <= 4; i++)
+for (let i = 3; i <= 4; i++)
 tracks.push(new Audio(`tracks/track${i}.mp3`))
 
 tracks.sort(function() {return 0.5 - Math.random()})
