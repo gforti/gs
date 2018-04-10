@@ -32,7 +32,7 @@ module.exports = [
         'incorrect'
     ],
     answer: 'correct',
-    time: 30,
+    time: 60,
     lock: true
 }
 ];

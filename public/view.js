@@ -21,10 +21,15 @@ let soundFXOn = true
 
 let s_correct = new Audio(`fx/correct.mp3`)
 let s_wrong = new Audio(`fx/wrong2.mp3`)
-let s_next = new Audio(`fx/wrong.wav`)
 let s_lock = new Audio(`fx/lock.wav`)
 let s_select = new Audio(`fx/select.mp3`)
 let s_buzz = new Audio(`fx/buzz4.wav`)
+
+let s_10sec = new Audio(`timer/10sec.mp3`)
+let s_30sec = new Audio(`timer/30sec.mp3`)
+let s_60sec = new Audio(`timer/60sec.mp3`)
+
+let QuestionSeconds = 0
 
 let startTimerTimer =
     cardBackTimer =
@@ -92,6 +97,7 @@ function prepareQuestion(data) {
     clearTimeout(questionReadyTimer)
 
     introTrack.pause()
+    pauseTimerMusic()
     showBuzzTeam = true
     info.classList.remove('info-display')
     info.classList.remove('wrong')
@@ -184,6 +190,7 @@ socket.on('musicVolume', (musicVol) => {
     tracks.forEach((track) => {
         track.volume = musicVol
     })
+    volumeTimerMusic(musicVol)
 })
 
 socket.on('soundFXToggle', (soundFX) => {
@@ -207,6 +214,8 @@ function displayChoices(data) {
     if ( data.choices && data.choices.length ) {
         correctAnswer = data.answer
         timeLeft = data.time
+        QuestionSeconds = data.time
+        resetTimerMusic()
         question.innerHTML = data.question
         words = data.question.split(" ")
         question.classList.remove('question-swoop')
@@ -270,6 +279,7 @@ function startTimer() {
         socket.emit('questionReady')
         questionReady = true
         clockTimer = setInterval(countdown, 1000)
+        if(soundFXOn) playTimerMusic()
     }, delay)
 }
 
@@ -279,13 +289,17 @@ function countdown() {
         return
     }
     if (!pauseTime) {
+        playTimerMusic()
         timeLeft--
         timer.innerHTML = timeLeft
+    } else {
+        pauseTimerMusic()
     }
 
 }
 
 function questionClose(show = true) {
+    pauseTimerMusic()
     clearInterval(clockTimer)
     questionReady = false
     socket.emit('questionClose')
@@ -316,6 +330,39 @@ function showCorrectAnswer() {
 }
 
 
+function playTimerMusic() {
+    stopTrack()
+    if (QuestionSeconds == 10) {
+        s_10sec.play()
+    }
+    if (QuestionSeconds == 30) {
+        s_30sec.play()
+    }
+    if (QuestionSeconds == 60) {
+        s_60sec.play()
+    }
+}
+
+ function pauseTimerMusic() {
+      s_10sec.pause()
+      s_30sec.pause()
+      s_60sec.pause()
+      playMusic()
+ }
+
+ function resetTimerMusic() {
+    s_10sec.currentTime = 0
+    s_30sec.currentTime = 0
+    s_60sec.currentTime = 0
+ }
+
+  function volumeTimerMusic(vol) {
+    s_10sec.volume = vol
+    s_30sec.volume = vol
+    s_60sec.volume = vol
+ }
+
+volumeTimerMusic(0.1)
 
 let introTrack = new Audio(`tracks/intro.mp3`)
 introTrack.volume = 0.1
@@ -323,7 +370,7 @@ introTrack.addEventListener('ended',()=>{
     socket.emit('introTrackEnded')
 })
 let tracks = [];
-for (let i = 1; i <= 3; i++)
+for (let i = 4; i <= 5; i++)
 tracks.push(new Audio(`tracks/track${i}.mp3`))
 
 tracks.sort(function() {return 0.5 - Math.random()})
